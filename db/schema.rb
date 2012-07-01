@@ -11,15 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120701200203) do
+ActiveRecord::Schema.define(:version => 20120701202038) do
 
   create_table "encounters", :force => true do |t|
     t.string   "text"
     t.integer  "location_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "expansion_id"
   end
 
+  add_index "encounters", ["expansion_id"], :name => "index_encounters_on_expansion_id"
   add_index "encounters", ["location_id"], :name => "index_encounters_on_location_id"
 
   create_table "expansions", :force => true do |t|
