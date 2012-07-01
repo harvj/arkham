@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120630224835) do
+ActiveRecord::Schema.define(:version => 20120701200203) do
 
   create_table "encounters", :force => true do |t|
     t.string   "text"
@@ -22,16 +22,6 @@ ActiveRecord::Schema.define(:version => 20120630224835) do
 
   add_index "encounters", ["location_id"], :name => "index_encounters_on_location_id"
 
-  create_table "expansion_locations", :force => true do |t|
-    t.integer  "expansion_id"
-    t.integer  "location_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "expansion_locations", ["expansion_id"], :name => "index_expansion_locations_on_expansion_id"
-  add_index "expansion_locations", ["location_id"], :name => "index_expansion_locations_on_location_id"
-
   create_table "expansions", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -40,8 +30,22 @@ ActiveRecord::Schema.define(:version => 20120630224835) do
 
   create_table "locations", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "neighborhood_id"
+    t.integer  "expansion_id"
   end
+
+  add_index "locations", ["expansion_id"], :name => "index_locations_on_expansion_id"
+  add_index "locations", ["neighborhood_id"], :name => "index_locations_on_neighborhood_id"
+
+  create_table "neighborhoods", :force => true do |t|
+    t.string   "name"
+    t.integer  "expansion_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "neighborhoods", ["expansion_id"], :name => "index_neighborhoods_on_expansion_id"
 
 end
