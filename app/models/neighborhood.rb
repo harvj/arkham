@@ -1,3 +1,6 @@
 class Neighborhood < ActiveRecord::Base
-  attr_accessible :expansion_id
+  attr_accessible :name, :expansion_id
+
+  belongs_to :expansion
+  has_many :locations
 end
