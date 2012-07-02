@@ -5,3 +5,15 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+require 'csv'
+
+# Expansions
+CSV.foreach("db/seed/expansions.csv") do |row|
+  Expansion.create!(:name => row[0])
+end
+
+# Neighborhoods
+CSV.foreach("db/seed/neighborhoods.csv") do |row|
+  Expansion.create!(:name => row[0])
+end
