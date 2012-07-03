@@ -1,6 +1,6 @@
 Arkham::Application.routes.draw do
 
-  root to: 'expansions#index'
+  root to: 'encounters#index'
   
   resources :encounters, :locations, :expansions
 

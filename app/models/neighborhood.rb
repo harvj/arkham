@@ -3,4 +3,8 @@ class Neighborhood < ActiveRecord::Base
 
   belongs_to :expansion
   has_many :locations
+
+  def to_s
+    self.name
+  end
 end

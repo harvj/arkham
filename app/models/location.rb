@@ -5,4 +5,8 @@ class Location < ActiveRecord::Base
   belongs_to :expansion
 
   has_many :encounters
+
+  def to_s
+    self.name
+  end
 end

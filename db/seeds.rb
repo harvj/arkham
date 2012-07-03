@@ -25,5 +25,5 @@ end
 
 # Arkham Encounters
 CSV.foreach("db/seed/encounters.csv") do |row|
-  Encounter.create!(:text => row[2], :expansion_id => row[0], :location_id => row[1])
+  Encounter.create!(:description => row[2], :expansion_id => row[0], :location_id => row[1])
 end

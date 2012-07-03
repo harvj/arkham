@@ -1,0 +1,11 @@
+<%= form_for encounters_path, :method => :get do %>
+
+  <%= select_tag "location", options_from_collection_for_select(Location.all, "id", "name", params[:location]) %>
+
+  <% Expansion.all.each do |expansion| %>
+    <%= check_box_tag 'expansions[]', expansion.id %>
+    <%= expansion.name %>
+  <% end %>
+  <%= submit_tag "Go!", :class => 'btn' %>
+
+<% end %>
