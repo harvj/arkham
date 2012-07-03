@@ -1,9 +1,9 @@
-<%= form_for encounters_path, :method => :get do %>
+<%= form_for encounters_path, method: :get, remote: true do %>
   <div class="select-location">
     <h4 class="location">Location: </h4>
     <%= select_tag "location", 
         options_from_collection_for_select(Location.base, "id", "name", (params[:location] || 3)) %>
-    <%= submit_tag "Go!", :class => 'btn' %>
+    <%= submit_tag "Go!", :class => 'btn', :id => "get-encounter" %>
   </div>
   <div class="expansion-filters">
     <h3>Select Expansions</h3>
@@ -16,14 +16,14 @@
     <h4>Large Box Expansions</h4>
     <% Expansion.large.each do |expansion| %>
       <div class="expansion-list">
-        <%= check_box_tag 'expansions[]', expansion.id, params[:expansions].include?(expansion.id.to_s) %>
+        <%= check_box_tag 'expansions[]', expansion.id, (params[:expansions].include?(expansion.id.to_s) if params[:expansions]) %>
         <%= content_tag :span, expansion.name %>
       </div>
     <% end %>
     <h4>Small box expansions</h4>
     <% Expansion.small.each do |expansion| %>
       <div class="expansion-list">
-        <%= check_box_tag 'expansions[]', expansion.id, params[:expansions].include?(expansion.id.to_s) %>
+        <%= check_box_tag 'expansions[]', expansion.id, (params[:expansions].include?(expansion.id.to_s) if params[:expansions]) %>
         <%= content_tag :span, expansion.name %>
       </div>
     <% end %>

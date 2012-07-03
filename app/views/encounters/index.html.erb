@@ -1,4 +1,4 @@
-<div id="expansion-filter">
+<div id="expansion-filter-form">
   <%= render 'filter' %>
 </div>
 
@@ -6,6 +6,6 @@
   <% if @encounter %>
     <%= render @encounter %>
   <% else %>
-    <%= content_tag :span, "Select a location." %>
+    <%= content_tag :div, "Select a location." %>
   <% end %>
 </div>
