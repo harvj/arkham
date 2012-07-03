@@ -6,6 +6,8 @@ class Location < ActiveRecord::Base
 
   has_many :encounters
 
+  scope :base, where( expansion_id: 1 )
+
   def to_s
     self.name
   end
