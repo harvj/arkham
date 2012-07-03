@@ -1,3 +1,5 @@
 <%= content_tag_for :li, expansion do %>
-  <span class="name"><%= expansion.name %>
+  <span class="name"><%= expansion.name %></span>
+  <span class="box-type">(<%= expansion.box_type %>)</span>
+  <span class="edit-link"><%= link_to "edit", edit_expansion_path(expansion) %></span>
 <% end %>

@@ -17,4 +17,17 @@ class ExpansionsController < ApplicationController
     end
   end
 
+  def edit
+    @expansion = Expansion.find(params[:id])
+  end
+
+  def update
+    @expansion = Expansion.find(params[:id])
+    if @expansion.update_attributes(params[:expansion])
+      redirect_to expansions_url, notice: "Expansion updated."
+    else
+      render 'edit', alert: "Expansion not updated."
+    end
+  end
+
 end

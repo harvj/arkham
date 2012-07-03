@@ -1,5 +1,10 @@
 class Expansion < ActiveRecord::Base
-  attr_accessible :name
+
+  BOX_TYPES = ['Base', 'Large', 'Small']
+
+  attr_accessible :name, :box_type
+
+  validates_inclusion_of :box_type, :in => BOX_TYPES
 
   has_many :neighborhoods
   has_many :locations

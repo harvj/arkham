@@ -2,6 +2,8 @@
 
   <%= select_tag "location", options_from_collection_for_select(Location.all, "id", "name", params[:location]) %>
 
+  <%= check_box_tag('expansions[]', 1, true, disabled: true) %>
+  <%= "Arkham Horror" %>
   <% Expansion.all.each do |expansion| %>
     <%= check_box_tag 'expansions[]', expansion.id %>
     <%= expansion.name %>
