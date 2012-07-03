@@ -13,4 +13,9 @@ class Expansion < ActiveRecord::Base
   def to_s
     self.name
   end
+
+  scope :base, where(box_type: "Base")
+  scope :large, where(box_type: "Large")
+  scope :small, where(box_type: "Small")
+  scope :non_base, where(box_type: ["Large", "Small"])
 end

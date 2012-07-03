@@ -1,7 +1,11 @@
-<div id="encounter-filter">
+<div id="expansion-filter">
   <%= render 'filter' %>
 </div>
 
 <div id="encounter-result">
-  <%= render @encounter %>
+  <% if @encounter %>
+    <%= render @encounter %>
+  <% else %>
+    <%= content_tag :span, "Select a location." %>
+  <% end %>
 </div>
