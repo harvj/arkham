@@ -9,8 +9,6 @@
 
 # Ignore database details
 /config/database.yml
-# Ignore seed data
-/db/seed/*
 
 
 # Ignore all logfiles and tempfiles.
