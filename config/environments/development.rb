@@ -34,4 +34,8 @@ Arkham::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Generate files with .sass syntax
+  config.sass.preferred_syntax = :sass
+  
 end
