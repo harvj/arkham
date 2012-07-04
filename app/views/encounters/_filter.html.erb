@@ -1,31 +1,21 @@
 <%= form_for encounters_path, method: :get, remote: true do %>
-  <div class="select-location">
+  <div class="location-form">
     <h4 class="location">Location: </h4>
-    <%= select_tag "location", 
-        options_from_collection_for_select(Location.base, "id", "name", (params[:location] || 3)) %>
+    <div id="location-select">
+      <%= select_tag "location", 
+          options_from_collection_for_select(@location_choices, "id", "name", (params[:location] || 3)) %>
+    </div>
     <%= submit_tag "Go!", :class => 'btn', :id => "get-encounter" %>
   </div>
   <div class="expansion-filters">
     <h3>Select Expansions</h3>
-    <h4>Base Game</h4>
-    <div class="expansion-list">
+    <div class="base-game">
       <%= hidden_field_tag('expansions[]', 1) %>
       <%= check_box_tag('expansions[]', 1, true, disabled: true) %>
       <%= content_tag :span, "Arkham Horror" %>
     </div>
-    <h4>Large Box Expansions</h4>
-    <% Expansion.large.each do |expansion| %>
-      <div class="expansion-list">
-        <%= check_box_tag 'expansions[]', expansion.id, (params[:expansions].include?(expansion.id.to_s) if params[:expansions]) %>
-        <%= content_tag :span, expansion.name %>
-      </div>
-    <% end %>
-    <h4>Small box expansions</h4>
-    <% Expansion.small.each do |expansion| %>
-      <div class="expansion-list">
-        <%= check_box_tag 'expansions[]', expansion.id, (params[:expansions].include?(expansion.id.to_s) if params[:expansions]) %>
-        <%= content_tag :span, expansion.name %>
-      </div>
-    <% end %>
+    <%= expansion_check_boxes("large") %>
+    <%= expansion_check_boxes("small") %>
+    <%= expansion_check_boxes("other") %>
   </div>
 <% end %>

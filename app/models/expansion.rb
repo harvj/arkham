@@ -1,6 +1,6 @@
 class Expansion < ActiveRecord::Base
 
-  BOX_TYPES = ['Base', 'Large', 'Small']
+  BOX_TYPES = ['Base', 'Large', 'Small', 'Other']
 
   attr_accessible :name, :box_type
 
@@ -17,5 +17,6 @@ class Expansion < ActiveRecord::Base
   scope :base, where(box_type: "Base")
   scope :large, where(box_type: "Large")
   scope :small, where(box_type: "Small")
+  scope :other, where(box_type: "Other")
   scope :non_base, where(box_type: ["Large", "Small"])
 end
