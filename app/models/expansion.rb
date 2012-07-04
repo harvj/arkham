@@ -2,7 +2,7 @@ class Expansion < ActiveRecord::Base
 
   BOX_TYPES = ['Base', 'Large', 'Small', 'Other']
 
-  attr_accessible :name, :box_type
+  attr_accessible :name, :box_type, :can_visit
 
   validates_inclusion_of :box_type, :in => BOX_TYPES
 
