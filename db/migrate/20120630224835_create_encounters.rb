@@ -1,7 +1,7 @@
 class CreateEncounters < ActiveRecord::Migration
   def change
     create_table :encounters do |t|
-      t.text :string
+      t.string :text
       t.integer :location_id
 
       t.timestamps
