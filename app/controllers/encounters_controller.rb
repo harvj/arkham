@@ -1,8 +1,8 @@
 class EncountersController < ApplicationController
 
   def index
-    locations_in_play = Location.where(expansion_id: params[:expansions])
-    @location_choices = locations_in_play.any? ? locations_in_play : Location.base 
+    locations_in_play = Location.where(expansion_id: params[:expansions]).order(:name)
+    @location_choices = locations_in_play.any? ? locations_in_play : Location.base.order(:name)
     
     if params[:location] and params[:expansions]
       included_expansions = params[:visiting] ||= params[:expansions]
