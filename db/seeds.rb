@@ -26,4 +26,7 @@ end
 # Arkham Encounters
 CSV.foreach("db/seed/encounters.csv") do |row|
   Encounter.create!(description: row[2], expansion_id: row[0], location_id: row[1])
+  if row[0] == "9" and !(row[2].match(/Patrol marker/))
+    Encounter.create!(description: row[2], expansion_id: 2, location_id: row[1])
+  end
 end

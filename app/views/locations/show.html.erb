@@ -1,0 +1,7 @@
+<p><%= @encounters.count %></p>
+<ul>
+  <% @encounters.each do |encounter| %>
+  <li><%= encounter.description %>
+  <span><%= link_to 'delete', encounter, method: :delete, :class => :delete %></span></li>
+  <% end %>
+</ul>

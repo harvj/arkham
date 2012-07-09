@@ -1,21 +1,26 @@
 class EncountersController < ApplicationController
 
   def index
-    expansions = Location.where(expansion_id: params[:expansions])
-    @location_choices = expansions.any? ? expansions : Location.base 
+    locations_in_play = Location.where(expansion_id: params[:expansions])
+    @location_choices = locations_in_play.any? ? locations_in_play : Location.base 
+    
     if params[:location] and params[:expansions]
-      if params[:visiting]
-        @encounters = Encounter.for_location(params[:location]).where(expansion_id: params[:visiting])
-      else    
-        @encounters = Encounter.for_location(params[:location]).where(expansion_id: params[:expansions])
-      end
-      @encounter = @encounters[rand(@encounters.count)]
+      included_expansions = params[:visiting] ||= params[:expansions]
+      @encounters = Encounter.for_location(params[:location]).where(expansion_id: included_expansions)
+      @index = rand(@encounters.count)
+      @encounter = @encounters[@index]
     end
 
     respond_to do |f|
       f.html
       f.js { render 'result' }
     end
+  end
+
+  def destroy
+    @encounter = Encounter.find(params[:id])
+    @encounter.destroy
+    redirect_to :back
   end
 
 end

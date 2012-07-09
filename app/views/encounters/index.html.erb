@@ -4,6 +4,7 @@
 
 <div id="encounter-result">
   <% if @encounter %>
+    <p><%= @encounters.count %></p>
     <%= render @encounter %>
   <% else %>
     <%= content_tag :div, "Select a location." %>
