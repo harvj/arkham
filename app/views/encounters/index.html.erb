@@ -1,0 +1,81 @@
+<div class="max-w-3xl mx-auto p-4 space-y-6">
+  <h1 class="text-2xl font-bold text-left">
+    Arkham Encounter
+  </h1>
+
+  <turbo-frame id="result">
+    <% if @encounter %>
+      <div class="bg-gray-50 rounded-lg border p-4 space-y-3 mb-6">
+
+        <h2 class="font-semibold text-lg">
+          <%= @encounter.location.name %>
+        </h2>
+
+        <p class="leading-relaxed">
+          <%= simple_format(@encounter.description) %>
+        </p>
+
+        <p class="text-xs text-gray-500 mt-2">
+          Card <%= @index + 1 %> of <%= @count %>
+          <span class="italic">
+            From <%= @encounter.expansion.name %>
+          </span>
+        </p>
+
+      </div>
+    <% end %>
+  </turbo-frame>
+
+  <turbo-frame id="filters">
+    <div class="bg-white rounded-lg shadow p-4 space-y-4">
+      <%= form_with url: root_path, method: :post, data: { turbo_frame: "filters" } do %>
+
+        <div class="space-y-2 mb-6">
+          <label class="block text-sm font-medium">
+            Location
+          </label>
+
+          <div class="flex flex-col md:flex-row md:items-center gap-3">
+            <div class="flex-1">
+              <%= select_tag :location_id,
+                options_from_collection_for_select(
+                  @locations, :id, :name, @location_id
+                ),
+                class: "w-full border rounded px-3 py-2"
+              %>
+            </div>
+
+            <%= submit_tag "Go!",
+              class: "w-full md:w-32 bg-emerald-700 hover:bg-emerald-800
+                text-white py-3 md:py-2 rounded-lg font-semibold transition",
+              data: { turbo_frame: "result" }
+            %>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <h2 class="font-semibold text-lg">
+            Select Expansions
+          </h2>
+
+          <div class="space-y-2">
+            <%= hidden_field_tag "expansion_ids[]", @base_expansion.id %>
+            <label class="flex items-center space-x-2 text-sm">
+              <%= check_box_tag "expansion_ids[]",
+                                @base_expansion.id,
+                                true,
+                                disabled: true %>
+
+              <span><%= @base_expansion.name %></span>
+            </label>
+          </div>
+
+          <%= render "expansion_group", title: "Large Expansions", expansions: @large_expansions %>
+          <%= render "expansion_group", title: "Small Expansions", expansions: @small_expansions %>
+          <%= render "expansion_group", title: "Other Expansions", expansions: @other_expansions %>
+        </div>
+
+      <% end %>
+    </div>
+  </turbo-frame>
+</div>

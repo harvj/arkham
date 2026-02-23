@@ -1,0 +1,11 @@
+name,can_visit,box_type
+Arkham Horror,false,Base
+Curse of the Dark Pharaoh,true,Small
+Dunwich Horror,false,Large
+The King in Yellow,true,Small
+Kingsport Horror,false,Large
+The Black Goat of the Woods,false,Small
+Innsmouth Horror,false,Large
+The Lurker at the Threshold,false,Small
+The Curse of the Dark Pharaoh (Revised Edition),true,Small
+Miskatonic Horror,false,Other

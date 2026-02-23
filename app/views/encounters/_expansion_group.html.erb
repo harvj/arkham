@@ -1,0 +1,43 @@
+<h4 class="font-bold italic text-gray-800">
+  <%= title %>
+</h4>
+
+<% expansions.each do |exp| %>
+
+  <div class="expansion"
+    data-controller="visiting"
+  >
+
+    <label class="flex items-center space-x-2 text-sm">
+
+      <%= check_box_tag "expansion_ids[]",
+                        exp.id,
+                        @expansion_ids.include?(exp.id),
+                        onchange: "this.form.requestSubmit()",
+                        data: { visiting_target: "expansion" },
+                        action: "change->visiting#toggle"
+      %>
+
+      <span><%= exp.name %></span>
+
+    </label>
+
+
+    <% if exp.can_visit? %>
+
+      <label class="flex items-center space-x-1 text-xs text-gray-600 ml-6">
+
+        <%= check_box_tag "visiting_ids[]",
+                          exp.id,
+                          @visiting_ids.include?(exp.id),
+                          onchange: "this.form.requestSubmit()",
+                          data: { visiting_target: "visiting" }
+        %>
+        <span>Visiting?</span>
+      </label>
+
+    <% end %>
+
+  </div>
+
+<% end %>
