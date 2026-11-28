@@ -1,0 +1,64 @@
+#!/bin/bash
+# Install only through the established root-operated Arkham deployment procedure.
+set -euo pipefail
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+umask 077
+
+verify_candidate() {
+    local sha=$1 expected=$2 digest
+    digest=$(as_deploy git archive --format=tar "$sha" | sha256sum)
+    [[ ${digest%% *} == "$expected" ]] || { echo 'Arkham artifact digest differs' >&2; return 1; }
+    /usr/local/libexec/harvj/release-integrity harvj/arkham "$sha" "$expected"
+}
+
+main() {
+    [[ $EUID == 0 && $# == 2 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] ||
+        { echo 'Usage: activate-existing-checkout SOURCE_SHA GIT_ARCHIVE_SHA256' >&2; return 2; }
+    local sha=$1 expected=$2 current=/var/www/arkham/current old ancestry
+    local evidence=/var/lib/harvj-release-integrity/arkham
+    [[ -d $current && ! -L $current ]] || return 1
+    cd "$current"
+    install -d -o root -g root -m 0700 /run/arkham-release
+    [[ ! -e /run/arkham-release/activation.lock || -f /run/arkham-release/activation.lock ]]
+    [[ ! -L /run/arkham-release/activation.lock ]]
+    exec 9>>/run/arkham-release/activation.lock
+    flock -n 9
+    [[ $(as_deploy git remote get-url origin) == git@github.com:harvj/arkham.git ]]
+    [[ -z $(as_deploy git status --porcelain) ]]
+    old=$(as_deploy git rev-parse --verify HEAD)
+    as_deploy git fetch --no-tags https://github.com/harvj/arkham.git refs/heads/main
+    as_deploy git merge-base --is-ancestor "$old" "$sha"
+    # This existing checkout path is for code-only releases. Runtime or database
+    # changes retain their separately reviewed application-specific procedure.
+    as_deploy git diff --quiet "$old" "$sha" -- .ruby-version Dockerfile Gemfile Gemfile.lock db config/deploy.yml vendor
+    ancestry=$(verify_candidate "$sha" "$expected") || return 1
+    [[ $(as_deploy git rev-parse --verify HEAD) == "$old" ]]
+    [[ -z $(as_deploy git status --porcelain) ]]
+    if ! (as_deploy git switch --detach "$sha" &&
+        [[ $(as_deploy git rev-parse --verify HEAD) == "$sha" ]] &&
+        [[ -z $(as_deploy git status --porcelain) ]] &&
+        systemctl restart arkham.service && health); then
+        as_deploy git switch --detach "$old" && systemctl restart arkham.service && health ||
+            { echo 'Arkham recovery failed; inspect the retained checkout' >&2; return 1; }
+        echo 'Arkham activation failed and the prior revision was restored' >&2
+        return 1
+    fi
+    install -d -o root -g root -m 0700 "$evidence"
+    tmp=$(mktemp "$evidence/.receipt.XXXXXXXX")
+    printf '%s\n' "$ancestry" >"$tmp"
+    mv -T "$tmp" "$evidence/$sha.json"
+    printf 'Arkham serving %s; verified receipt %s/%s.json\n' "$sha" "$evidence" "$sha"
+}
+
+as_deploy() {
+    /usr/sbin/runuser -u deploy -- env -i PATH=/usr/bin:/bin HOME=/home/deploy GIT_TERMINAL_PROMPT=0 "$@"
+}
+
+health() {
+    curl -fsS --max-time 10 --retry 8 --retry-connrefused --unix-socket \
+        /var/www/arkham/shared/tmp/sockets/puma.sock http://arkham.radioactivita.com/up >/dev/null
+}
+
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+    main "$@"
+fi
