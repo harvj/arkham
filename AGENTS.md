@@ -5,3 +5,10 @@ Follow [Infrastructure Simple Operations v1.1](https://github.com/harvj/infrastr
 ## Design review screenshots
 
 For visual UI changes, retain a concise, representative set of actual browser screenshots under `docs/design/` in the application repository, with a short README and relative image links for GitHub review. Include relevant desktop/mobile and light/dark states; use before/after captures when useful. Temporary `/tmp` screenshots are development artifacts, not final review evidence. Do not add a new CI gate or enforcement mechanism for this convention.
+
+## REL-01 release integrity
+
+Qualify the exact source SHA and canonical Git archive digest against protected
+GitHub main before changing the serving checkout. Keep the existing protected
+checkout deployment and verify the running revision. Follow
+[Infrastructure REL-01](https://github.com/harvj/infrastructure/blob/main/docs/standards/main-branch-release-integrity.md).
