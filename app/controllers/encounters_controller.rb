@@ -3,7 +3,7 @@ class EncountersController < ApplicationController
 
   def index
     @expansion_ids = Array(params[:expansion_ids]).map(&:to_i)
-    @expansion_ids = [@base_expansion.id] if @expansion_ids.empty?
+    @expansion_ids = [ @base_expansion.id ] if @expansion_ids.empty?
 
     @visiting_ids  = Array(params[:visiting_ids]).map(&:to_i)
 
